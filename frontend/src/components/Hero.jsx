@@ -7,15 +7,9 @@ const HERO_IMAGES = [
 ];
 export default function Hero() {
   return (
-    <article className="px-6 relative h-150 pt-6">
+    <article className="mx-6 relative max-h-200 h-auto mt-6">
       <Carousel images={HERO_IMAGES} />
-      <div className="absolute top-20 left-12 max-w-md  text-white text-left">
-        <h1 className="font-header mb-4 leading-16  text-6xl font-normal">
-          We are digital meets fashions
-        </h1>
-        <p>Shopping</p>
-      </div>
-      <div className="w-full absolute text-center top-120">
+      <div className="w-full absolute text-center bottom-10">
         <Button main className="">
           Start shopping
         </Button>

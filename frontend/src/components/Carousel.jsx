@@ -8,7 +8,7 @@ export default function Carousel({ images }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const handlePreviousClick = () => {
     setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? images.length : prevIndex - 1,
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1,
     );
   };
   const handleNextIndex = useCallback(() => {
@@ -24,14 +24,19 @@ export default function Carousel({ images }) {
 
   return (
     <>
-      <ul className="rounded-2xl overflow-hidden h-full w-full object-top object-cover">
+      <ul className="rounded-2xl overflow-hidden h-200 w-full max-md:h-120 ">
         {images.map((img) => (
-          <li key={img.id}>
+          <li
+            key={img.id}
+            className={
+              currentImageIndex !== img.id ? "hidden" : "h-full w-full "
+            }
+          >
             <motion.img
               src={img.url}
               initial={{ opacity: 0.6 }}
               whileInView={{ opacity: 1, transition: { duration: 0.5 } }}
-              className={currentImageIndex !== img.id ? "hidden" : ""}
+              className={"w-full h-full object-cover object-top"}
             ></motion.img>
           </li>
         ))}
