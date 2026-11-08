@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addCartItem, checkingOut, fetchCartData } from "../util/cart-http";
+import { paymentUpdateStatus } from "../util/order-http";
 import { queryClient } from "../util/http";
 import { useDispatch } from "react-redux";
 import { cartActions } from "../../store/cart.slice";
@@ -30,7 +31,22 @@ const useAddItemToCart = () => {
 };
 const usePayment = () => {
   return useMutation({
-    mutationFn: ({ signal }) => checkingOut({ signal }),
+    mutationFn: ({ signal, data }) => checkingOut({ signal, data }),
+    onSuccess: (data) => {
+      // console.log(data)
+      window.location.href = data.url;
+    },
   });
 };
-export { useAddItemToCart, useGetCart, usePayment };
+const usePaymentComplete = () => {
+  const dispatch = useDispatch();
+  return useMutation({
+    mutationFn: ({ signal, oId, session_id }) =>
+      paymentUpdateStatus({ signal, oId, session_id }),
+    onSuccess: (data) => {
+      dispatch(cartActions.resetCart());
+      return data;
+    },
+  });
+};
+export { useAddItemToCart, useGetCart, usePayment, usePaymentComplete };

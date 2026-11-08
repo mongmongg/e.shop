@@ -1,28 +1,17 @@
 import mongoose from "mongoose";
+import { cartSchema } from "./cart.model.js";
 
 const orderSchema = new mongoose.Schema({
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+  userData: {
+    email: { type: String },
+    firstName: { type: String },
+    lastName: { type: String },
+    address: { type: String },
+    city: { type: String },
+    postal: { type: String },
+    phone: { type: Number },
   },
-  address: {
-    street: String,
-    postal: String,
-    city: String,
-  },
-  productData: {
-    items: [
-      {
-        product: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product",
-        },
-      },
-    ],
-    totalQuantity: { type: Number },
-    totalPrice: { type: Number },
-  },
+  productsData: cartSchema,
   date: {
     type: Date,
     default: Date.now,
@@ -33,3 +22,6 @@ const orderSchema = new mongoose.Schema({
     default: "pending",
   },
 });
+
+const Order = mongoose.model("Order", orderSchema);
+export default Order;

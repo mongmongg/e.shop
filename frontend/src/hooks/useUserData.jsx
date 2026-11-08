@@ -4,20 +4,21 @@ import { useDispatch } from "react-redux";
 import { authActions } from "../../store/auth.slice";
 import { useEffect } from "react";
 import { queryClient } from "../util/http";
+import { useNavigate } from "react-router-dom";
 
 const queryKey = ["user"];
 const useCheckAuthStatus = () => {
   const dispatch = useDispatch();
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey,
     queryFn: ({ signal }) => checkAuth({ signal }),
     staleTime: 1000 * 60 * 5,
     retry: false,
   });
   useEffect(() => {
-    dispatch(authActions.setAuth(data?.isAuthenticated));
-  }, [data, data?.isAuthenticated, dispatch]);
-  return data;
+    dispatch(authActions.setAuth(data));
+  }, [data, dispatch]);
+  return { data, isLoading };
 };
 const useAuth = ({ onSuccessFallback, isLogin }) => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const useAuth = ({ onSuccessFallback, isLogin }) => {
 };
 const useLogout = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: ({ signal }) => {
       return logout({ signal });
@@ -40,6 +42,7 @@ const useLogout = () => {
     onSuccess: () => {
       dispatch(authActions.removeAuth());
       queryClient.invalidateQueries(queryKey);
+      navigate("/");
     },
   });
 };

@@ -28,9 +28,21 @@ const fetchProducts = async ({ signal }) => {
   return handleSendReq(url, { signal }, "while fetching");
 };
 
-const fetchProductById = async ({ signal, id }) => {
-  const url = BASE_URL + "/products/detail/" + id;
+const fetchProductById = async ({ signal, pId }) => {
+  const url = BASE_URL + "/products/detail/" + pId;
   return handleSendReq(url, { signal }, "while fetching product by id");
 };
 
-export { fetchProducts, fetchProductById };
+const addProduct = async ({ signal, data }) => {
+  const url = BASE_URL + "/admin/product";
+  console.log(data);
+  return handleSendReq(url, {
+    signal,
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify({ data }),
+    credentials: "include",
+  });
+};
+
+export { fetchProducts, fetchProductById, addProduct };

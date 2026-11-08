@@ -1,8 +1,12 @@
 import express from "express";
 import { body } from "express-validator";
-import { signin, signup, logout } from "../controllers/user.controller.js";
-import passport from "passport";
-import checkAuthToken from "../util/authentication.js";
+import {
+  signin,
+  signup,
+  logout,
+  checkVerify,
+} from "../controllers/user.controller.js";
+
 
 const router = express.Router();
 
@@ -10,9 +14,7 @@ const emailValidator = () => body("email").normalizeEmail().isEmail();
 const passwordValidator = () => body("password").isLength({ min: 8 });
 const nameValidator = () => body("fullname").not().isEmpty();
 
-router.get("/checkAuth", checkAuthToken, (req, res) => {
-  return res.status(200).json({ message: "verified", isAuthenticated: true });
-});
+router.get("/checkAuth", checkVerify);
 
 router.post(
   "/signup",

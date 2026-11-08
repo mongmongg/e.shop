@@ -1,11 +1,18 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import AddToCartButton from "../Cart/AddToCartButton";
+import Button from "../UI/Button";
 
 export default function CardItem({ image, name, summary, price, id }) {
   const navigate = useNavigate();
+  const server = "http://localhost:3000/products/";
   const handleDetailItem = () => {
     navigate(`/products/${id}`);
   };
+  const handleEdit = (event) => {
+    event.stopPropagation();
+    navigate(`/products/${id}/edit`);
+  };
+  const isAdmin = true;
 
   return (
     <li
@@ -14,23 +21,33 @@ export default function CardItem({ image, name, summary, price, id }) {
     >
       <div className="bg-black h-6/10 rounded-xl overflow-hidden">
         <img
-          src={image}
+          src={`${server}/${image}`}
           className="object-center object-cover w-full h-full"
         ></img>
       </div>
       <div className="mt-2 [&_p]:max-md:text-sm">
         <p className="text-lg font-semibold ">{name}</p>
-        <p className="text-gray-700 text-sm max-md:!text-xs">{summary}</p>
+        <p className="text-gray-700 text-sm max-md:text-xs!">{summary}</p>
         <p className="font-semibold">${price}</p>
       </div>
       <div className="flex items-center gap-2 mt-2">
-        <AddToCartButton
-          id={id}
-          summary={summary}
-          name={name}
-          price={price}
-          className="bg-black text-white w-full max-md:text-sm"
-        />
+        {!isAdmin && (
+          <AddToCartButton
+            id={id}
+            summary={summary}
+            name={name}
+            price={price}
+            className="bg-black text-white w-full max-md:text-sm"
+          />
+        )}
+        {isAdmin && (
+          <Button
+            className="bg-black text-white w-full max-md:text-sm hover:bg-black/70"
+            onClick={handleEdit}
+          >
+            Edit
+          </Button>
+        )}
       </div>
     </li>
   );
