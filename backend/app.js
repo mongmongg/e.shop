@@ -11,6 +11,7 @@ import userRoute from "./routes/user.route.js";
 import productRoute from "./routes/product.route.js";
 import cartRoute from "./routes/cart.route.js";
 import orderRoute from "./routes/order.route.js";
+import adminRoute from "./routes/admin.route.js";
 import { HttpError } from "./models/http-error.js";
 import checkAuthToken from "./util/authentication.js";
 import cookieParser from "cookie-parser";
@@ -46,6 +47,7 @@ app.use(productRoute);
 app.use("/cart", cartRoute);
 app.use(checkAuthToken);
 app.use("/order", orderRoute);
+app.use("/admin", adminRoute);
 
 app.use((error, req, res, next) => {
   const status = error.code || 500;

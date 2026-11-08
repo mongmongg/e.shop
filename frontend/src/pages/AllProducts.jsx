@@ -9,7 +9,7 @@ export default function AllProducts() {
     <>
       <section className="flex justify-end gap-2 mx-8 mt-4">
         <form>
-          <label htmlFor="email"></label>
+          <label htmlFor="product"></label>
           <div className="flex items-center justify-between gap-1 px-4 bg-gray-300/30 border border-white/25 rounded-full overflow-hidden ">
             <input
               type="text"
@@ -36,8 +36,8 @@ function TagButton({ tag, title }) {
   btnCss = `${btnCss} ${search && search === tag ? "bg-black text-white" : ""}`;
 
   return (
-    <Button className={btnCss}>
-      <Link to={`?search=${tag}`}>{title}</Link>
-    </Button>
+    <Link to={`?search=${tag}`}>
+      <Button className={btnCss}>{title}</Button>
+    </Link>
   );
 }

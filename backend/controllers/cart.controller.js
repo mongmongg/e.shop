@@ -1,5 +1,13 @@
+import Order from "../models/order.model.js";
 import { Product } from "../models/product.model.js";
 import { handleReqInput } from "./user.controller.js";
+//import { loadStripe } from "@stripe/stripe-js";
+import Stripe from "stripe";
+const STRIPE_API_KEY =
+  "sk_test_51UHfVwRritMctMjYC8UpmcUHAJOWE1R0cPg2wBXQrPnIIGsVaX3mfPJGeGTYVMQjWsAeJ7QEvVBuRSf6Z72lxy5r00gSOAAipY";
+//const stripe = await loadStripe(STRIPE_API_KEY);
+const stripe = new Stripe(STRIPE_API_KEY);
+
 function getCart(req, res, next) {
   const cart = req.session.cart;
   if (!cart) {
@@ -28,30 +36,39 @@ async function addCartItem(req, res, next) {
 }
 
 async function checkingOut(req, res, next) {
-  //console.log(req.body);
   if (handleReqInput(req, next)) return;
-  const DOMAIN = "http://localhost:3000";
-  const cart = res.locals.cart;
-  const session = await stripe.checkout.sessions.create({
-    line_items: cart.items.map(function (item) {
-      return {
-        price_data: {
-          currency: "thb",
-          product_data: {
-            name: item.product.name,
-          },
-          unit_amount: +item.product.price.toFixed(2) * 100,
-        },
-        quantity: item.quantity,
-      };
-    }),
-    mode: "payment",
-    payment_method_types: ["card"],
-    success_url: `${DOMAIN}/order/payment/success`,
-    cancel_url: `${DOMAIN}/order/payment/failure`,
-  });
+  const DOMAIN = "http://localhost:5173";
+  const cart = req.session.cart;
+  const userData = req.body;
 
-  res.redirect(303, session.url);
+  req.session.order = { userData, order: cart };
+  req.session.save();
+  const orderData = { userData: req.body, productsData: cart };
+  const newOrder = new Order(orderData);
+  await newOrder.save();
+  try {
+    const session = await stripe.checkout.sessions.create({
+      ui_mode: "hosted_page",
+      line_items: cart.items.map(function (item) {
+        return {
+          price_data: {
+            currency: "thb",
+            product_data: {
+              name: item.name,
+            },
+            unit_amount: +item.price.toFixed(2) * 100,
+          },
+          quantity: item.quantity,
+        };
+      }),
+      mode: "payment",
+      success_url: `${DOMAIN}/payment/${newOrder._id}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${DOMAIN}/payment/${newOrder._id}?session_id={CHECKOUT_SESSION_ID}`,
+    });
+    res.json({ url: session.url });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
 export { getCart, addCartItem, checkingOut };

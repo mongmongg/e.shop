@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const cartItemSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true }, // ✅ ประกาศตรงๆ เพื่อไม่ให้โดนกรองทิ้ง
+    id: { type: String, require: true },
     name: { type: String },
     summary: { type: String },
     price: { type: Number },
@@ -11,7 +11,7 @@ const cartItemSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const cartSchema = new mongoose.Schema({
+export const cartSchema = new mongoose.Schema({
   items: [cartItemSchema],
   totalQuantity: { type: Number },
   totalPrice: { type: Number },

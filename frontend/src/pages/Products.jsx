@@ -27,27 +27,6 @@ export default function Products({ header }) {
                 />
               ))}
           </Suspense>
-          {/* <CardItem
-            image={productImg}
-            name="Blazer"
-            summary="women blazer"
-            price="399"
-            id="1"
-          />
-          <CardItem
-            image={productImg}
-            name="Blazer"
-            summary="women blazer"
-            price="399"
-            id="1"
-          />
-          <CardItem
-            image={productImg}
-            name="Blazer"
-            summary="women blazer"
-            price="399"
-            id="1"
-          /> */}
         </CardItemList>
       </section>
     </article>

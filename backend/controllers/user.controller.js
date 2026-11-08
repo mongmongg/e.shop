@@ -47,18 +47,6 @@ async function signup(req, res, next) {
   });
   try {
     await newUser.save();
-    // req.logIn(newUser, (err) => {
-    //   if (err) return next(err);
-
-    //   return res.status(201).json({
-    //     message: "Sign up and logged in successfully",
-    //     user: {
-    //       id: newUser._id,
-    //       email: newUser.email,
-    //       fullname: newUser.fullname,
-    //     },
-    //   });
-    // });
   } catch (err) {
     console.log(err);
     const error = new HttpError(
@@ -87,17 +75,7 @@ async function signup(req, res, next) {
     userData: { _id: newUser._id.toString(), email, fullname },
   });
 }
-// function signin(req, res, next) {
-//   return res.status(200).json({
-//     message: "Signed in successfully",
-//     user: {
-//       id: req.user._id,
-//       email: req.user,
-//       email,
-//       fullname: req.user.fullname,
-//     },
-//   });
-// }
+
 async function signin(req, res, next) {
   handleReqInput(req);
 
@@ -158,24 +136,6 @@ async function signin(req, res, next) {
     },
   });
 }
-// function signin(req, res, next) {
-//   passport.authenticate("local", (err, user, info) => {
-//     if (err) return next(err);
-//     if (!user) {
-//       return next(new HttpError(info.message || "Invalid credentials", 401));
-//     }
-//     req.login(user, (err) => {
-//       if (err) return next(err);
-//       return res.status(200).json({
-//         message: "Signed in successfully",
-//         user: {
-//           id: req.user._id,
-//           email: req.user.email,
-//         },
-//       });
-//     });
-//   })(req, res, next);
-// }
 
 function logout(req, res, next) {
   res.clearCookie("jwt", {
@@ -187,4 +147,32 @@ function logout(req, res, next) {
   res.status(200).json({ message: "Logged out" });
 }
 
-export { signin, signup, logout };
+function checkVerify(req, res, next) {
+  try {
+    //const token = req.headers.authorization.split(" ")[1]; //Authorization: "Bearer token"
+    const token = req.cookies.jwt;
+    if (!token) {
+      //Scenario: succedd but no token
+      return res.status(401).json({ message: "No token found" });
+    }
+    const decodedToken = jwt.verify(token, TOKEN_KEY, async (err, decoded) => {
+      if (err) {
+        console.error("Verificatioon failed");
+        next();
+      } else {
+        const userData = await User.findById(decoded.userId);
+        req.session.userEmail = userData.email;
+        req.session.isAdmin = userData.isAdmin;
+        res.json({
+          userData: { fullname: userData.fullname, email: userData.email },
+          isAdmin: userData.isAdmin,
+        });
+        return decoded;
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+export { signin, signup, logout, checkVerify };

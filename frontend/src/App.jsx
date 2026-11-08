@@ -13,9 +13,13 @@ import Checkout from "./pages/Checkout";
 import Cart from "./pages/Cart";
 import Order from "./pages/Order";
 import ErrorPage from "./pages/ErrorPage";
+import Payment from "./pages/Payment";
+import AdminProducts from "./pages/admin/AdminProducts";
 import { queryClient } from "./util/http";
-import { lazy } from "react";
-import { Suspense } from "react";
+
+import { Suspense, lazy } from "react";
+import AdminOrders from "./pages/admin/AdminOrders";
+import NewProduct from "./pages/admin/NewProduct";
 
 function App() {
   const router = createBrowserRouter([
@@ -38,8 +42,21 @@ function App() {
         },
         { path: "/cart", element: <Cart /> },
         { path: "/cart/checkout", element: <Checkout /> },
+        { path: "/payment/:oId", element: <Payment /> },
         { path: "/order", element: <Order /> },
-        { path: "auth", element: <Authentication /> },
+        { path: "/auth", element: <Authentication /> },
+        {
+          path: "/admin",
+          children: [
+            {
+              index: "true",
+              element: <AdminProducts />,
+            },
+            { path: "orders", element: <AdminOrders /> },
+            { path: "products/new", element: <NewProduct /> },
+            { path: "products/:pId/edit", element: <NewProduct /> },
+          ],
+        },
       ],
     },
   ]);

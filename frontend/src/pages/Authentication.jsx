@@ -17,7 +17,6 @@ export default function Authentication() {
     },
   });
   const handleSubmit = (data) => {
-    console.log(data);
     mutate({ data });
   };
   return (

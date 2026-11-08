@@ -6,6 +6,11 @@ const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
+    resetCart(state) {
+      state.items = initialState.items;
+      state.totalQuantity = 0;
+      state.totalPrice = 0;
+    },
     replaceCart(state, action) {
       if (action.payload) {
         const cart = action.payload;

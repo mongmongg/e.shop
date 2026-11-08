@@ -6,15 +6,17 @@ import { Link } from "react-router-dom";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { usePayment } from "../hooks/useCart";
+import { useCheckAuthStatus } from "../hooks/useUserData";
 
 export default function Checkout() {
   const { totalPrice, totalQuantity } = useSelector((state) => state.cart);
   const { userData } = useSelector((state) => state.auth);
   const [firstName, lastName] = userData.fullname.split(" ");
-  const { mutate: paymentMutate } = usePayment();
-
+  const { data, mutate: paymentMutate } = usePayment();
+  //console.log(data);
   const handleOrder = (data) => {
-    //console.log(data);
+    console.log(data);
+    data.email = userData.email;
     paymentMutate({ data });
   };
   return (
@@ -27,6 +29,7 @@ export default function Checkout() {
               label="E-mail Address"
               type="email"
               name="email"
+              disabled
               defaultValue={userData.email}
             ></Input>
           </Container>
