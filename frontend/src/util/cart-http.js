@@ -1,64 +1,56 @@
-import { handleResponse, BASE_URL } from "./http";
+import { BASE_URL, handleSendReq } from "./http";
 
 const fetchCartData = async ({ signal }) => {
   const url = BASE_URL + "/cart";
-  try {
-    const response = await fetch(url, { signal, credentials: "include" });
-    return handleResponse(response, "An error occured while getting cart data");
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  return handleSendReq(
+    url,
+    { signal, credentials: "include" },
+    "while getting cart data",
+  );
 };
 const addCartItem = async ({ signal, data }) => {
+  console.log(data);
   const url = BASE_URL + "/cart/items";
-  console.log({ ...data });
-  try {
-    const response = await fetch(url, {
+  return handleSendReq(
+    url,
+    {
       signal,
       method: "POST",
       body: JSON.stringify(data),
       credentials: "include",
       headers: { "Content-type": "application/json" },
-    });
-    return handleResponse(response, "An error occured while getting cart data");
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+    },
+    "while adding item to cart",
+  );
 };
 const updateCartItem = async ({ signal, data }) => {
   const url = BASE_URL + "/items";
-  try {
-    const response = await fetch(url, {
+  return handleSendReq(
+    url,
+    {
       signal,
       method: "PATCH",
       body: JSON.stringify(data),
       credentials: "include",
       headers: { "Content-type": "application/json" },
-    });
-    return handleResponse(response, "An error occured while getting cart data");
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+    },
+    "while updating cart items",
+  );
 };
 
 const checkingOut = async ({ signal, data }) => {
   const url = BASE_URL + "/cart/checkout";
-  try {
-    const response = await fetch(url, {
+  return handleSendReq(
+    url,
+    {
       signal,
       method: "POST",
-    body: JSON.stringify(data),
+      body: JSON.stringify(data),
       credentials: "include",
       headers: { "Content-type": "application/json" },
-    });
-    return handleResponse(response, "An error occured while getting cart data");
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+    },
+    "while checking out",
+  );
 };
 
 export { fetchCartData, addCartItem, updateCartItem, checkingOut };

@@ -1,9 +1,10 @@
-import Form from "../../components/Form/Form";
 import Input from "../../components/Form/Input";
 import PageContent from "../../components/shared/PageContent";
 import Button from "../../components/UI/Button";
 import { Link, useParams } from "react-router-dom";
 import { useAddProduct, useProductById } from "../../hooks/useProduct";
+import { useRef, useState } from "react";
+import LoadingPage from "../LoadingPage";
 
 export default function NewProduct() {
   const { pId } = useParams();
@@ -11,13 +12,32 @@ export default function NewProduct() {
   const { mutate: addNewProduct } = useAddProduct();
   const product = data?.product || undefined;
 
-  const handleSaveNewProduct = (data) => {
-    console.log(data);
-    addNewProduct({ data });
+  const filePickerRef = useRef();
+  const [selectedImage, setSelectedImage] = useState();
+  const handlePickedImage = (event) => {
+    if (event.target.files && event.target.files.length === 1) {
+      const pickedFile = event.target.files[0];
+      setSelectedImage(
+        pickedFile ? URL.createObjectURL(pickedFile) : undefined,
+      );
+    }
   };
+  const handleSaveNewProduct = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    addNewProduct({ data: formData, pId });
+  };
+
+  if (isLoading) {
+    return <LoadingPage />;
+  }
   return (
-    <PageContent header="New Product">
-      <Form className="col-span-3 mx-auto" onSubmit={handleSaveNewProduct}>
+    <PageContent header={pId ? "Edit Product" : "New Product"}>
+      <form
+        className="col-span-3 mx-auto min-w-100"
+        onSubmit={handleSaveNewProduct}
+        key={pId}
+      >
         <Input
           label="Product Name"
           name="name"
@@ -48,24 +68,38 @@ export default function NewProduct() {
           />
           <p className="my-4!">THB</p>
         </div>
-        <div className="flex items-center gap-4 mt-4">
-          <img className="w-30 h-30 object-cover"></img>
-          <Input
-            name="image"
-            type="file"
-            accept="image/jpeg, image/png"
-            className="outline-none"
-          />
+        <Input
+          label="Product Image"
+          name="image"
+          type="file"
+          ref={filePickerRef}
+          accept="image/jpeg, image/png"
+          onChange={handlePickedImage}
+          className="outline-none hidden"
+        />
+        <div className="flex justify-center items-center gap-4 py-4 border border-black/40">
+          <img
+            src={selectedImage}
+            className={`w-30 h-30 object-cover ${!selectedImage ? "hidden" : ""}`}
+            alt="preview"
+          ></img>
+          <Button
+            onClick={() => filePickerRef.current.click()}
+            type="button"
+            className="my-4"
+          >
+            Choose image
+          </Button>
         </div>
         <div className="mt-4 flex gap-2 justify-end">
-          <Link to="/admin">
+          <Link to={-1}>
             <Button type="reset">Cancel</Button>
           </Link>
           <Button className="bg-black text-white hover:bg-black/70">
             Save
           </Button>
         </div>
-      </Form>
+      </form>
     </PageContent>
   );
 }

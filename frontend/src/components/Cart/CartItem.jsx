@@ -7,7 +7,7 @@ import image from "/hero/hero-1.jpg";
 import Line from "../UI/Line";
 
 export default function CartItem({ item }) {
-  const { mutate: addItem } = useAddItemToCart();
+  const { mutate: updateItem } = useAddItemToCart();
   const dispatch = useDispatch();
   const { items, totalQuantity, totalPrice } = useSelector(
     (state) => state.cart,
@@ -29,18 +29,19 @@ export default function CartItem({ item }) {
     let timer;
     if (items.length > 0) {
       timer = setTimeout(() => {
-        addItem({ data: { items, totalQuantity, totalPrice } });
+        updateItem({ data: { items, totalQuantity, totalPrice } });
       }, 1000);
     }
     return () => {
       clearTimeout(timer);
     };
-  }, [items, totalQuantity, totalPrice, addItem]);
+  }, [items, totalQuantity, totalPrice, updateItem]);
 
   const handleMinusBtn = (event) => {
     event.stopPropagation();
     dispatch(cartActions.removeItemFromCart(item.id));
   };
+
   return (
     <li className="w-full h-50 flex gap-8 mt-4 max-lg:h-50 max-md:flex-col max-md:gap-2 max-md:h-auto ">
       <img src={image} className="max-lg:w-50 max-lg:h-fit max-md:w-full"></img>
@@ -51,11 +52,7 @@ export default function CartItem({ item }) {
         <div className="flex items-center gap-4 w-26 mb-1 bg-black/10 px-4 py-2 rounded-full max-lg:w-20 max-lg:px-2">
           <FaMinus
             onClick={handleMinusBtn}
-            className={
-              item.quantity === 1
-                ? "text-gray-500 max-lg:text-xs"
-                : "hover:cursor-pointer max-lg:text-xs"
-            }
+            className="hover:cursor-pointer max-lg:text-xs"
           />
           <p className="max-lg:text-xs">{item.quantity}</p>
           <FaPlus
@@ -63,9 +60,7 @@ export default function CartItem({ item }) {
             onClick={handleAddToCart}
           />
         </div>
-        <p className="text-sm text-gray-700 mb-3! hover:text-red-500 hover:cursor-pointer">
-          Remove
-        </p>
+
         <p className="text-gray-700 max-lg:text-sm">
           Subtotal: <span className="font-semibold">{item.totalPrice} THB</span>
         </p>

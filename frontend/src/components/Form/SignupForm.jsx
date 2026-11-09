@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
 import Input from "./Input";
-export default function SignupForm() {
+export default function SignupForm({ resetError }) {
+  useEffect(() => {
+    resetError();
+  }, []);
   return (
     <section className="mt-4">
       <Input
@@ -8,7 +12,6 @@ export default function SignupForm() {
         label="Email Adress"
         type="email"
         placeholder="you@example.com"
-        required
       />
       <Input
         name="password"
@@ -16,14 +19,8 @@ export default function SignupForm() {
         type="password"
         minLength="8"
         placeholder="At least 8 characters"
-        required
       />
-      <Input
-        name="fullname"
-        label="Full Name"
-        placeholder="Jane Doe"
-        required
-      />
+      <Input name="fullname" label="Full Name" placeholder="Jane Doe" />
       <p className="flex gap-4">
         <input type="checkbox" name="terms" id="terms" required></input>
         <label htmlFor="terms">Membership agreement</label>

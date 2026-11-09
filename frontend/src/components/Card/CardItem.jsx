@@ -1,18 +1,19 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AddToCartButton from "../Cart/AddToCartButton";
 import Button from "../UI/Button";
+import { useSelector } from "react-redux";
 
 export default function CardItem({ image, name, summary, price, id }) {
+  const { isAdmin } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const server = "http://localhost:3000/products/";
+  const server = "http://localhost:3000";
   const handleDetailItem = () => {
-    navigate(`/products/${id}`);
+    navigate(isAdmin ? `/admin/products/${id}` : `/products/${id}`);
   };
   const handleEdit = (event) => {
     event.stopPropagation();
-    navigate(`/products/${id}/edit`);
+    navigate(`${id}/edit`);
   };
-  const isAdmin = true;
 
   return (
     <li
@@ -21,7 +22,7 @@ export default function CardItem({ image, name, summary, price, id }) {
     >
       <div className="bg-black h-6/10 rounded-xl overflow-hidden">
         <img
-          src={`${server}/${image}`}
+          src={`${server}/${image.replace(/\\/g, "/")}`}
           className="object-center object-cover w-full h-full"
         ></img>
       </div>
@@ -41,10 +42,7 @@ export default function CardItem({ image, name, summary, price, id }) {
           />
         )}
         {isAdmin && (
-          <Button
-            className="bg-black text-white w-full max-md:text-sm hover:bg-black/70"
-            onClick={handleEdit}
-          >
+          <Button black onClick={handleEdit}>
             Edit
           </Button>
         )}

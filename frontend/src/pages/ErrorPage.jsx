@@ -27,7 +27,7 @@ export default function ErrorPage() {
           <p>
             {message} <span>Click button bellow to go to the home page</span>
           </p>
-          <Button className="bg-black text-white hover:bg-black/70">
+          <Button black>
             <Link>Back to Home page</Link>
           </Button>
         </article>

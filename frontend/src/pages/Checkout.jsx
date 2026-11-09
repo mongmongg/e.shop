@@ -6,14 +6,13 @@ import { Link } from "react-router-dom";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { usePayment } from "../hooks/useCart";
-import { useCheckAuthStatus } from "../hooks/useUserData";
 
 export default function Checkout() {
   const { totalPrice, totalQuantity } = useSelector((state) => state.cart);
   const { userData } = useSelector((state) => state.auth);
   const [firstName, lastName] = userData.fullname.split(" ");
-  const { data, mutate: paymentMutate } = usePayment();
-  //console.log(data);
+  const { mutate: paymentMutate } = usePayment();
+
   const handleOrder = (data) => {
     console.log(data);
     data.email = userData.email;

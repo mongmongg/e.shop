@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { useProductById } from "../hooks/useProduct";
 import { FaMinus, FaPlus } from "react-icons/fa6";
@@ -6,14 +7,15 @@ import { FaMinus, FaPlus } from "react-icons/fa6";
 import image from "/hero/hero-1.jpg";
 import Button from "../components/UI/Button";
 import AddToCartButton from "../components/Cart/AddToCartButton";
+import LoadingPage from "./LoadingPage";
 
 export default function ProductDetail() {
   const [amount, setAmount] = useState(1);
+  const { isAdmin } = useSelector((state) => state.auth);
+
   const { pId } = useParams();
   const { data, isLoading } = useProductById({ pId });
-
   const prod = data.product;
-  const isAdmin = true; //check isAdmin?
 
   const handleAddBtn = () => {
     setAmount((prev) => prev + 1);
@@ -21,6 +23,9 @@ export default function ProductDetail() {
   const handleMinusBtn = () => {
     setAmount((prev) => (prev === 1 ? prev : prev - 1));
   };
+  if (isLoading) {
+    return <LoadingPage />;
+  }
 
   return (
     <section className="min-h-130 grid grid-cols-3 mx-30 mt-8 mb-16">
@@ -59,7 +64,7 @@ export default function ProductDetail() {
         {isAdmin && (
           <div className="mt-4">
             <Link to="edit">
-              <Button className="bg-black text-white w-full max-md:text-sm hover:bg-black/70">
+              <Button className="w-full max-md:text-sm" black>
                 Edit
               </Button>
             </Link>

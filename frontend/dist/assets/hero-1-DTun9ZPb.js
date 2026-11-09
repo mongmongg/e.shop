@@ -1,0 +1,1 @@
+var e=`/hero/hero-1.jpg`;export{e as t};

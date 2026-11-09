@@ -1,20 +1,21 @@
 import PageContent from "../components/shared/PageContent";
 import image from "/hero/hero-1.jpg";
-import { getOrder } from "../util/order-http";
-import { useQuery } from "@tanstack/react-query";
+import { useGetOrder, useUpdateOrder } from "../hooks/useOrder";
+import { useSelector } from "react-redux";
 
 export default function Order() {
-  const { data } = useQuery({
-    queryKey: ["order"],
-    queryFn: ({ signal }) => getOrder({ signal }),
-  });
-  const orders = data?.orders || [];
+  const isAdmin = useSelector((state) => state.auth.isAdmin);
+  const { data, isLoading } = useGetOrder({ isAdmin });
+
+  const orders = data.orders;
   return (
-    <PageContent header="Your Orders">
+    <PageContent header={isAdmin ? "Customer Orders" : "Your Orders"}>
       <OrderContent>
-        {orders.map((order) => (
-          <OrderItem key={order._id} order={order} />
-        ))}
+        {!isLoading &&
+          orders &&
+          orders.map((order) => (
+            <OrderItem key={order._id} order={order} isAdmin={isAdmin} />
+          ))}
       </OrderContent>
     </PageContent>
   );
@@ -23,6 +24,7 @@ export function OrderContent({ children }) {
   return <ul className="mt-4 mx-auto col-span-3 w-[80%]">{children}</ul>;
 }
 export function OrderItem({ order, isAdmin }) {
+  const { mutate } = useUpdateOrder();
   const date = new Date(order.date);
   const formatedDate = date.toLocaleDateString("en-TH", {
     weekday: "long",
@@ -32,8 +34,10 @@ export function OrderItem({ order, isAdmin }) {
   });
   const handleStatusChange = (event, status) => {
     if (event.target.value !== status) {
-      console.log(event.target.value);
-      // update to server
+      mutate({ id: order._id, status: event.target.value });
+      // console.log(event.target.value);
+      // console.log(order._id);
+      // // update to server
     }
   };
 
@@ -42,6 +46,11 @@ export function OrderItem({ order, isAdmin }) {
       <img src={image} className="max-lg:w-50 max-lg:h-fit max-md:w-full"></img>
       <div>
         <p className="text-lg mb-2! max-lg:text">Order: {order._id}</p>
+        {isAdmin && (
+          <p className="text-lg mb-2! max-lg:text">
+            User: {order.userData.email}
+          </p>
+        )}
         <p className="text-2xl mb-2! max-lg:text-lg">
           {order.productsData.totalPrice} THB - {formatedDate}
         </p>
