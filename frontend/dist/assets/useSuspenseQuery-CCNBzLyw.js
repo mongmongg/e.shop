@@ -1,0 +1,1 @@
+import{f as e,m as t,p as n}from"./http-CzlPDgIw.js";function r(r,i){return e({...r,enabled:!0,suspense:!0,throwOnError:n,placeholderData:void 0},t,i)}export{r as t};

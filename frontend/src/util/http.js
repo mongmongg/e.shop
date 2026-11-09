@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 export const queryClient = new QueryClient();
- export const BASE_URL = import.meta.env.VITE_BASE_URL;
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
 //export const BASE_URL = "http://localhost:3000";
 export const handleResponse = async (response, fallbackError) => {
   if (!response.ok) {
@@ -21,11 +21,13 @@ export const handleSendReq = async (url, config, errorMsg) => {
   }
 };
 
-const fetchProducts = async ({ signal, searchTerm }) => {
+const fetchProducts = async ({ signal, searchTerm, max }) => {
   let url = BASE_URL + "/products";
-  console.log(searchTerm);
+
   if (searchTerm) {
     url += `?search=${searchTerm}`;
+  } else if (max) {
+    url += `?max=${max}`;
   }
   return handleSendReq(
     url,

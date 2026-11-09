@@ -6,7 +6,7 @@ import { useSearchParams } from "react-router-dom";
 import { useSearchProducts } from "../hooks/useProduct";
 
 export default function Products({ header }) {
-  const { data, isLoading } = useAllProducts();
+  const { data, isLoading } = useAllProducts({});
   const [searchParam] = useSearchParams();
   const searchTerm = searchParam.get("search");
   const { data: searchProoduct } = useSearchProducts({

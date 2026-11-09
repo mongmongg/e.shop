@@ -1,1 +1,0 @@
-import{g as e}from"./http-CRmuYOT1.js";var t=e();function n({className:e,onSubmit:n,children:r}){return(0,t.jsx)(`form`,{onSubmit:e=>{e.preventDefault();let t=new FormData(e.target);n(Object.fromEntries(t))},className:e,children:r})}export{n as t};

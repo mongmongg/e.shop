@@ -8,10 +8,10 @@ import {
   updateProduct,
 } from "../util/http";
 
-const useAllProducts = () => {
+const useAllProducts = ({ max }) => {
   return useSuspenseQuery({
-    queryKey: ["products"],
-    queryFn: ({ signal }) => fetchProducts({ signal }),
+    queryKey: ["products", { max }],
+    queryFn: ({ signal }) => fetchProducts({ signal, max }),
   });
 };
 
