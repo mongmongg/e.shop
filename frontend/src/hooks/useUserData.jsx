@@ -1,10 +1,11 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { signup, signin, logout, checkAuth } from "../util/user-http";
-import { useDispatch } from "react-redux";
-import { authActions } from "../../store/auth.slice";
-import { useEffect } from "react";
-import { queryClient } from "../util/http";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+
+import { signup, signin, logout, checkAuth } from "../util/user-http";
+import { authActions } from "../../store/auth.slice";
+import { queryClient } from "../util/http";
 
 const queryKey = ["user"];
 const useCheckAuthStatus = () => {
@@ -17,10 +18,12 @@ const useCheckAuthStatus = () => {
   });
   useEffect(() => {
     dispatch(authActions.setAuth(data));
+    console.log(data);
   }, [data, dispatch]);
   return { data, isLoading };
 };
 const useAuth = ({ onSuccessFallback, isLogin }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   return useMutation({
     mutationFn: ({ signal, data }) => {
@@ -28,7 +31,7 @@ const useAuth = ({ onSuccessFallback, isLogin }) => {
     },
     onSuccess: (data) => {
       dispatch(authActions.setAuth(data));
-      onSuccessFallback();
+      data.isAdmin ? navigate("/admin/products") : navigate("/");
     },
   });
 };
@@ -41,7 +44,7 @@ const useLogout = () => {
     },
     onSuccess: () => {
       dispatch(authActions.removeAuth());
-      queryClient.invalidateQueries(queryKey);
+      queryClient.clear();
       navigate("/");
     },
   });

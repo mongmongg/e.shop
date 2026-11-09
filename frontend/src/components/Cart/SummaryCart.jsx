@@ -11,9 +11,6 @@ export default function SummaryCart({
   const sumCss = "text-xl font-semibold max-lg:text-md";
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
-  // const handleActionBtn = () => {
-  //   onAction();
-  // };
   return (
     <div className="bg-black/10 px-6 py-8 w-full lg:max-w-80 max-h-75">
       <FlexContent>
@@ -34,6 +31,7 @@ export default function SummaryCart({
         <Button
           onClick={onAction}
           disabled={!isAuthenticated}
+          black
           className={`w-full  text-white hover:bg-black/80 ${!isAuthenticated ? "bg-black/80" : "bg-black"}`}
         >
           {actionBtn}

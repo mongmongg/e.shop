@@ -34,7 +34,7 @@ export default function AddToCartButton({
     };
   }, [items, addItem]);
   return (
-    <Button onClick={handleAddToCart} {...props}>
+    <Button onClick={handleAddToCart} {...props} black>
       Add to Cart
     </Button>
   );

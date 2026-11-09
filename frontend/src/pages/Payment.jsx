@@ -1,10 +1,11 @@
-import { FaCheckCircle, FaCross } from "react-icons/fa";
+import { FaCheckCircle } from "react-icons/fa";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import PageContent from "../components/shared/PageContent";
 import Button from "../components/UI/Button";
 import { MdCancel } from "react-icons/md";
 import { usePaymentComplete } from "../hooks/useCart";
 import { useEffect } from "react";
+import LoadingPage from "./LoadingPage";
 
 export default function Payment() {
   const [searchParams] = useSearchParams();
@@ -17,7 +18,7 @@ export default function Payment() {
   }, []);
 
   if (isPending || !data) {
-    return <p>loading...</p>;
+    return <LoadingPage />;
   }
   const isSuccess = data?.status === "paid";
 
@@ -32,13 +33,11 @@ export default function Payment() {
         <h1 className="text-lg font-semibold">
           Payment {`${isSuccess ? "Successful" : "Cancelled"}`}
         </h1>
-        <p>
+        <p className="mb-4!">
           {`${isSuccess ? "Thank you for your purchase, Payment successful, and your order is comfirmed" : "Your payment has been cancelled"}`}
         </p>
         <Link to="/">
-          <Button className="bg-black text-white mt-8 hover:bg-gray-700">
-            Go to Homepage
-          </Button>
+          <Button black>Go to Homepage</Button>
         </Link>
       </article>
     </PageContent>

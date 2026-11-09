@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { isAuthenticated: false, userData: {} };
+const initialState = { isAdmin: false, isAuthenticated: false, userData: {} };
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -9,12 +9,15 @@ const authSlice = createSlice({
       if (action.payload) {
         state.isAuthenticated = true;
         state.userData = action.payload.userData;
+        state.isAdmin = action.payload.isAdmin;
       } else {
-        state.isAuthenticated = false;
+        return;
       }
     },
     removeAuth: (state, action) => {
       state.isAuthenticated = false;
+      state.isAdmin = false;
+      state.userData = {};
     },
   },
 });

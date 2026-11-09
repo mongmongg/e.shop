@@ -1,14 +1,23 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import CardItem from "../components/Card/CardItem";
 import CardItemList from "../components/Card/CartItemList";
-import { fetchProducts } from "../util/http";
 import { Suspense } from "react";
+import { useAllProducts } from "../hooks/useProduct";
+import { useSearchParams } from "react-router-dom";
+import { useSearchProducts } from "../hooks/useProduct";
+
 export default function Products({ header }) {
-  const { data, isLoading } = useSuspenseQuery({
-    queryKey: ["products"],
-    queryFn: ({ signal }) => fetchProducts({ signal }),
+  const { data, isLoading } = useAllProducts({});
+  const [searchParam] = useSearchParams();
+  const searchTerm = searchParam.get("search");
+  const { data: searchProoduct } = useSearchProducts({
+    searchTerm,
   });
-  const products = data.products;
+  let products;
+  if (searchTerm !== "all") {
+    products = searchProoduct.products;
+  } else {
+    products = data.products;
+  }
   return (
     <article id="products" className="mt-16">
       <section className="mx-6 max-md:mx-2">

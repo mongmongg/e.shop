@@ -1,16 +1,15 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useUserData";
 import image from "/hero/hero-2.jpg";
 import Button from "../components/UI/Button";
 import Form from "../components/Form/Form";
 import SigninForm from "../components/Form/SigninForm";
 import SignupForm from "../components/Form/SignupForm";
-import { useAuth } from "../hooks/useUserData";
-import { useNavigate } from "react-router-dom";
 export default function Authentication() {
   const [searchParams] = useSearchParams();
   const isLogin = searchParams.get("mode") === "signin";
   const navigate = useNavigate();
-  const { mutate } = useAuth({
+  const { mutate, isError, error, reset } = useAuth({
     isLogin,
     onSuccessFallback: () => {
       navigate("/");
@@ -30,13 +29,10 @@ export default function Authentication() {
             ? "Sign in to access your account, orders, and saved details."
             : "Register now for exclusive offers and order updates"}
         </span>
-        {/* error message */}
-        {/* <span className="">error</span> */}
-        {isLogin && <SigninForm />}
-        {!isLogin && <SignupForm />}
-        <Button className="bg-black text-white max-md:text-sm">
-          {isLogin ? "Sign in" : "Sign up"}
-        </Button>
+        {isLogin && <SigninForm resetError={reset} />}
+        {!isLogin && <SignupForm resetError={reset} />}
+        {isError && <p className="text-red-500 my-2!">{error.message}</p>}
+        <Button black>{isLogin ? "Sign in" : "Sign up"}</Button>
       </Form>
       <section className="bg-black mr-8 rounded-xl overflow-hidden">
         <img src={image} className="w-full h-full object-cover"></img>

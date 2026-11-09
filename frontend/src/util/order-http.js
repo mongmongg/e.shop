@@ -1,20 +1,41 @@
-import { BASE_URL, handleResponse } from "./http";
+import { BASE_URL, handleSendReq } from "./http";
 
 const getOrder = async ({ signal }) => {
   const url = BASE_URL + "/order";
-  const response = await fetch(url, { signal, credentials: "include" });
-  try {
-    return handleResponse(response, "An error occured");
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  const config = {
+    signal,
+    credentials: "include",
+  };
+  return handleSendReq(url, config, "while getting order");
+};
+const getAllOrders = async ({ signal }) => {
+  const url = BASE_URL + "/admin/orders";
+  const config = {
+    signal,
+    credentials: "include",
+  };
+  return handleSendReq(url, config, "while getting all orders");
+};
+const updateOrder = async ({ signal, id, status }) => {
+  const url = BASE_URL + "/admin/updateOrder";
+  return handleSendReq(
+    url,
+    {
+      signal,
+      method: "PATCH",
+      body: JSON.stringify({ id, status }),
+      headers: { "Content-type": "application/json" },
+      credentials: "include",
+    },
+    "while updating order",
+  );
 };
 
 const paymentUpdateStatus = async ({ signal, oId, session_id }) => {
   const url = BASE_URL + "/order/payment/complete";
-  try {
-    const response = await fetch(url, {
+  return handleSendReq(
+    url,
+    {
       signal,
       method: "POST",
       body: JSON.stringify({ oId, session_id }),
@@ -22,15 +43,9 @@ const paymentUpdateStatus = async ({ signal, oId, session_id }) => {
       headers: {
         "Content-type": "application/json",
       },
-    });
-    return handleResponse(
-      response,
-      "An error occured while update order status",
-    );
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+    },
+    "while updating payment",
+  );
 };
 
-export { getOrder, paymentUpdateStatus };
+export { getOrder, paymentUpdateStatus, getAllOrders, updateOrder };

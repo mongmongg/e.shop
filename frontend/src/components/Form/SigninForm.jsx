@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import Input from "./Input";
-export default function SigninForm() {
+import { useEffect } from "react";
+export default function SigninForm({ resetError }) {
+  useEffect(() => {
+    resetError();
+  }, []);
   return (
     <section className="mt-4">
       <Input
@@ -8,7 +12,6 @@ export default function SigninForm() {
         label="Email Adress"
         type="email"
         placeholder="you@example.com"
-        required
       />
       <Input
         name="password"
@@ -16,15 +19,14 @@ export default function SigninForm() {
         type="password"
         minLength="8"
         placeholder="At least 8 characters"
-        required
       />
       <p className="py-4 text-gray-700">
-        New here? 
+        New here?
         <Link
           to="/auth/?mode=signup"
           className="ml-1 text-black font-semibold  hover:underline  hover:underline-offset-4"
         >
-        Create an account
+          Create an account
         </Link>
       </p>
     </section>
