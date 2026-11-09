@@ -95,7 +95,7 @@ export default function NewProduct() {
           <Link to={-1}>
             <Button type="reset">Cancel</Button>
           </Link>
-          <Button className="bg-black text-white hover:bg-black/70">
+          <Button black>
             Save
           </Button>
         </div>

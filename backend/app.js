@@ -1,7 +1,7 @@
 import express from "express";
 import { connectToMongoDB } from "./data/database.js";
 import cors from "cors";
-import { corsOptioncs } from "./middleware/CORS.js";
+import { corsOptions } from "./middleware/CORS.js";
 import session from "express-session";
 import "dotenv/config";
 import { createSessionConfig } from "./data/session.config.js";
@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static("uploads"));
 app.use(cookieParser());
 
-app.use(cors(corsOptioncs));
+app.use(cors(corsOptions));
 
 app.use(session(createSessionConfig()));
 

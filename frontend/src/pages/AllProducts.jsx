@@ -19,7 +19,7 @@ export default function AllProducts() {
 
   return (
     <>
-      <section className="flex justify-end gap-2 mx-8 mt-4">
+      <section className="flex justify-end gap-2 mx-8 mt-4 max-md:flex-col">
         <form>
           <label htmlFor="product"></label>
           <div className="flex items-center justify-between gap-1 px-4 bg-gray-300/30 border border-white/25 rounded-full overflow-hidden ">
@@ -34,13 +34,23 @@ export default function AllProducts() {
             <FaSearchengin className="text-gray-500 hover:cursor-pointer" />
           </div>
         </form>
-        <TagButton tag="all" title="All" onClick={() => setSearchTerm("all")} />
-        <TagButton
-          tag="women"
-          title="Women"
-          onClick={() => setSearchTerm("women")}
-        />
-        <TagButton tag="men" title="Men" onClick={() => setSearchTerm("men")} />
+        <div>
+          <TagButton
+            tag="all"
+            title="All"
+            onClick={() => setSearchTerm("all")}
+          />
+          <TagButton
+            tag="women"
+            title="Women"
+            onClick={() => setSearchTerm("women")}
+          />
+          <TagButton
+            tag="men"
+            title="Men"
+            onClick={() => setSearchTerm("men")}
+          />
+        </div>
       </section>
       <Products
         header={`${deboncedQuery === "all" || !deboncedQuery ? "All" : `"${deboncedQuery}"`} Products`}

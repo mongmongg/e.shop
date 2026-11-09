@@ -3,16 +3,17 @@ import { useAddItemToCart } from "../../hooks/useCart";
 import { cartActions } from "../../../store/cart.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { FaMinus, FaPlus } from "react-icons/fa6";
-import image from "/hero/hero-1.jpg";
 import Line from "../UI/Line";
+import { useProductById } from "../../hooks/useProduct";
+import { BASE_URL } from "../../util/http";
 
 export default function CartItem({ item }) {
   const { mutate: updateItem } = useAddItemToCart();
+  const { data } = useProductById({ pId: item.id });
   const dispatch = useDispatch();
   const { items, totalQuantity, totalPrice } = useSelector(
     (state) => state.cart,
   );
-
   const handleAddToCart = (event) => {
     event.stopPropagation();
     dispatch(
@@ -42,9 +43,16 @@ export default function CartItem({ item }) {
     dispatch(cartActions.removeItemFromCart(item.id));
   };
 
+  const server = BASE_URL;
+
   return (
     <li className="w-full h-50 flex gap-8 mt-4 max-lg:h-50 max-md:flex-col max-md:gap-2 max-md:h-auto ">
-      <img src={image} className="max-lg:w-50 max-lg:h-fit max-md:w-full"></img>
+      <div className="max-w-80 max-lg:w-50 max-lg:h-fit max-md:w-full overflow-hidden">
+        <img
+          src={`${server}/${data.product.image}`}
+          className="object-cover"
+        ></img>
+      </div>
       <div>
         <p className="text-lg mb-2! max-lg:text">{item.name}</p>
         <p className="text-gray-500 max-lg:text-sm">{item.summary}</p>
