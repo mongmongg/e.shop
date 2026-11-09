@@ -5,20 +5,19 @@ import { handleReqInput } from "./user.controller.js";
 import Stripe from "stripe";
 const STRIPE_API_KEY =
   "sk_test_51UHfVwRritMctMjYC8UpmcUHAJOWE1R0cPg2wBXQrPnIIGsVaX3mfPJGeGTYVMQjWsAeJ7QEvVBuRSf6Z72lxy5r00gSOAAipY";
-//const stripe = await loadStripe(STRIPE_API_KEY);
+
 const stripe = new Stripe(STRIPE_API_KEY);
 
 function getCart(req, res, next) {
   const cart = req.session.cart;
   if (!cart) {
-    res.status(200).json({ message: "Empty Cart Data", cart: null });
+    return res.status(200).json({ message: "Empty Cart Data", cart: null });
   }
   res.status(200).json({ message: "Get Cart Data", cart: cart });
 }
 
-async function addCartItem(req, res, next) {
+async function updateCartItem(req, res, next) {
   const { id } = req.body;
-  //console.log(req.body);
   let product;
   try {
     product = await Product.findById(id);
@@ -29,7 +28,6 @@ async function addCartItem(req, res, next) {
   cart.items = [...req.body.items];
   cart.totalQuantity = req.body.totalQuantity;
   cart.totalPrice = req.body.totalPrice;
-  console.log(req.body.totalPrice);
   req.session.cart = cart;
   req.session.save();
   res.status(201).json({ message: "Cart updated" });
@@ -71,4 +69,4 @@ async function checkingOut(req, res, next) {
   }
 }
 
-export { getCart, addCartItem, checkingOut };
+export { getCart, updateCartItem, checkingOut };

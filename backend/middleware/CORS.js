@@ -1,8 +1,5 @@
-const alllowedOrigin = [
-  "http://localhost:5173",
-  "http://localhost:3000",
-  "https://checkout.stripe.com",
-];
+import "dotenv/config";
+const alllowedOrigin = process.env.ALLOW_ORIGIN;
 export const corsOptioncs = {
   origin: alllowedOrigin,
   methods: "GET,POST,PATCH,DELETE,OPTIONS",

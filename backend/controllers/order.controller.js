@@ -1,7 +1,7 @@
 import Order from "../models/order.model.js";
 import Stripe from "stripe";
-const STRIPE_API_KEY =
-  "sk_test_51UHfVwRritMctMjYC8UpmcUHAJOWE1R0cPg2wBXQrPnIIGsVaX3mfPJGeGTYVMQjWsAeJ7QEvVBuRSf6Z72lxy5r00gSOAAipY";
+import "dotenv/config";
+const STRIPE_API_KEY = process.env.STRIPE_API_KEY;
 const stripe = new Stripe(STRIPE_API_KEY);
 
 async function getOrder(req, res, next) {
