@@ -2,11 +2,12 @@ import { useNavigate } from "react-router-dom";
 import AddToCartButton from "../Cart/AddToCartButton";
 import Button from "../UI/Button";
 import { useSelector } from "react-redux";
+import { BASE_URL } from "../../util/http";
 
 export default function CardItem({ image, name, summary, price, id }) {
   const { isAdmin } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const server = "http://localhost:3000";
+  const server = BASE_URL;
   const handleDetailItem = () => {
     navigate(isAdmin ? `/admin/products/${id}` : `/products/${id}`);
   };
@@ -29,7 +30,7 @@ export default function CardItem({ image, name, summary, price, id }) {
       <div className="mt-2 [&_p]:max-md:text-sm">
         <p className="text-lg font-semibold ">{name}</p>
         <p className="text-gray-700 text-sm max-md:text-xs!">{summary}</p>
-        <p className="font-semibold">${price}</p>
+        <p className="font-semibold">{price} THB</p>
       </div>
       <div className="flex items-center gap-2 mt-2">
         {!isAdmin && (
@@ -42,7 +43,7 @@ export default function CardItem({ image, name, summary, price, id }) {
           />
         )}
         {isAdmin && (
-          <Button black onClick={handleEdit}>
+          <Button black className="w-full" onClick={handleEdit}>
             Edit
           </Button>
         )}

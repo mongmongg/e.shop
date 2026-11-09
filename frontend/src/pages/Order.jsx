@@ -1,7 +1,8 @@
 import PageContent from "../components/shared/PageContent";
-import image from "/hero/hero-1.jpg";
 import { useGetOrder, useUpdateOrder } from "../hooks/useOrder";
 import { useSelector } from "react-redux";
+import { useProductById } from "../hooks/useProduct";
+import { BASE_URL } from "../util/http";
 
 export default function Order() {
   const isAdmin = useSelector((state) => state.auth.isAdmin);
@@ -25,6 +26,12 @@ export function OrderContent({ children }) {
 }
 export function OrderItem({ order, isAdmin }) {
   const { mutate } = useUpdateOrder();
+
+  const server = BASE_URL;
+  const { data } = useProductById({
+    pId: order.productsData.items[order.productsData.items.length - 1].id,
+  });
+  console.log(order);
   const date = new Date(order.date);
   const formatedDate = date.toLocaleDateString("en-TH", {
     weekday: "long",
@@ -35,15 +42,17 @@ export function OrderItem({ order, isAdmin }) {
   const handleStatusChange = (event, status) => {
     if (event.target.value !== status) {
       mutate({ id: order._id, status: event.target.value });
-      // console.log(event.target.value);
-      // console.log(order._id);
-      // // update to server
     }
   };
 
   return (
     <li className="w-full h-50 flex gap-8 mt-4 max-lg:h-50 max-md:flex-col max-md:gap-2 max-md:h-auto ">
-      <img src={image} className="max-lg:w-50 max-lg:h-fit max-md:w-full"></img>
+      <div className="max-w-80 max-lg:w-50 max-lg:h-fit max-md:w-full overflow-hidden">
+        <img
+          src={`${server}/${data.product.image}`}
+          className="max-lg:w-50 max-lg:h-fit max-md:w-full"
+        ></img>
+      </div>
       <div>
         <p className="text-lg mb-2! max-lg:text">Order: {order._id}</p>
         {isAdmin && (

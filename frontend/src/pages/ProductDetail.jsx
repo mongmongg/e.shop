@@ -4,14 +4,16 @@ import { Link, useParams } from "react-router-dom";
 import { useProductById } from "../hooks/useProduct";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 
-import image from "/hero/hero-1.jpg";
 import Button from "../components/UI/Button";
 import AddToCartButton from "../components/Cart/AddToCartButton";
 import LoadingPage from "./LoadingPage";
+import { BASE_URL } from "../util/http";
 
 export default function ProductDetail() {
   const [amount, setAmount] = useState(1);
   const { isAdmin } = useSelector((state) => state.auth);
+
+  const server = BASE_URL;
 
   const { pId } = useParams();
   const { data, isLoading } = useProductById({ pId });
@@ -28,11 +30,17 @@ export default function ProductDetail() {
   }
 
   return (
-    <section className="min-h-130 grid grid-cols-3 mx-30 mt-8 mb-16">
-      <div className="col-span-2">
-        <img src={image}></img>
+    <section
+      className="min-h-130 grid grid-cols-3 mx-30 mt-8 mb-16 
+   max-lg:mx-10 max-md:grid-cols-1 max-md:min-h-100"
+    >
+      <div className="col-span-2 max-h-140 overflow-hidden">
+        <img
+          src={`${server}/${prod.image}`}
+          className="h-full object-cover mx-auto"
+        ></img>
       </div>
-      <div className="mx-16 ">
+      <div className="mx-16 max-lg:mx-4">
         <div className="flex flex-cols justify-between mb-4 [&_p]:text-2xl [&_p]:font-semibold">
           <p>{prod.name}</p>
           <p>{prod.price} THB</p>

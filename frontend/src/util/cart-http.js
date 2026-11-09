@@ -9,7 +9,6 @@ const fetchCartData = async ({ signal }) => {
   );
 };
 const addCartItem = async ({ signal, data }) => {
-  console.log(data);
   const url = BASE_URL + "/cart/items";
   return handleSendReq(
     url,
