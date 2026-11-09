@@ -11,8 +11,11 @@ export const handleReqInput = (req, next) => {
   const result = validationResult(req);
   const errors = result.array();
   if (errors.length > 0) {
-    console.log("Input error" + errors);
-    next(new HttpError("Invalid inputs, please check your inputs", 422));
+    const error = new HttpError(
+      "Invalid inputs, please check your inputs",
+      422,
+    );
+    next(error);
     return true;
   }
   return false;
@@ -77,7 +80,7 @@ async function signup(req, res, next) {
 }
 
 async function signin(req, res, next) {
-  handleReqInput(req);
+  if (handleReqInput(req, next)) return;
 
   const { email, password } = req.body;
   let existingUser;
@@ -134,6 +137,7 @@ async function signin(req, res, next) {
       email: existingUser.email,
       fullname: existingUser.fullname,
     },
+    isAdmin: existingUser.isAdmin,
   });
 }
 

@@ -6,13 +6,14 @@ import {
   updateProduct,
   deleteProduct,
 } from "../controllers/admin.controller.js";
+import fileUpload from "../middleware/file-upload.js";
 const router = express.Router();
 
 router.get("/orders", getAllOrders);
 router.patch("/updateOrder", updateStatus);
 
-router.post("/product", addProduct);
-router.patch("/product/edit", updateProduct);
+router.post("/product", fileUpload.single("image"), addProduct);
+router.patch("/product/:pId/edit", fileUpload.single("image"), updateProduct);
 router.delete("/product/delete", deleteProduct);
 
 export default router;

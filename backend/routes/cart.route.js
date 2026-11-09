@@ -2,7 +2,7 @@ import express from "express";
 import { body } from "express-validator";
 const router = express.Router();
 import {
-  addCartItem,
+  updateCartItem,
   getCart,
   checkingOut,
 } from "../controllers/cart.controller.js";
@@ -16,7 +16,7 @@ const postalValidator = () => body("postal").not().isEmpty();
 const phoneValidator = () => body("phone").not().isEmpty();
 
 router.get("/", getCart); //cart page
-router.post("/items", addCartItem); // /cart/items
+router.post("/items", updateCartItem); // /cart/items
 router.post(
   "/checkout",
   firstNameValidator(),

@@ -1,8 +1,7 @@
 import { HttpError } from "../models/http-error.js";
+import "dotenv/config";
 import jwt from "jsonwebtoken";
-// export const TOKEN_KEY = process.env.TOKEN_SECRET_KEY;
-const TOKEN_KEY = "SECRETTOKEN";
-
+export const TOKEN_KEY = process.env.TOKEN_SECRET_KEY;
 export default function checkAuthToken(req, res, next) {
   if (req.method === "OPTIONS") {
     return next();

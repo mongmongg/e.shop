@@ -1,8 +1,6 @@
-import { MongoClient } from "mongodb";
 import mongoose from "mongoose";
-
-// const url = process.env.DATABASE;
-const url = "mongodb://localhost:27017/eshop";
+import "dotenv/config";
+const url = process.env.DATABASE;
 let database;
 
 async function connectToMongoDB() {
