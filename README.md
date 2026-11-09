@@ -193,7 +193,3 @@ e.shop/
 |TOKEN_KEY|JSON Web Token secret key|
 |PORT| Backend port (default:3000)|
 |DATABASE| MongoDB project URL|
-![Uploading 04.PNG…]()
-<img width="1137" height="709" alt="03" src="https://github.com/user-attachments/assets/9749977d-bdcb-40e6-ae70-0d61f652cbb3" />
-<img width="1132" height="707" alt="02" src="https://github.com/user-attachments/assets/59bf850a-71e1-4aad-8e72-1f673f719ba9" />
-<img width="1138" height="708" alt="01" src="https://github.com/user-attachments/assets/edc91336-2983-4a8d-9dca-8102c1b12a39" />
