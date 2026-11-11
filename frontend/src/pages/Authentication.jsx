@@ -19,8 +19,8 @@ export default function Authentication() {
     mutate({ data });
   };
   return (
-    <article className="mt-8 grid grid-cols-2 w-full min-h-120">
-      <Form onSubmit={handleSubmit} className="ml-40 mr-30">
+    <article className="mt-8 grid grid-cols-2 w-full min-h-120 max-md:grid-cols-1">
+      <Form onSubmit={handleSubmit} className="ml-40 mr-30 max-md:mx-8">
         <h1 className="text-2xl font-semibold">
           {isLogin ? "Sign in" : "Sign up"}
         </h1>
@@ -34,7 +34,7 @@ export default function Authentication() {
         {isError && <p className="text-red-500 my-2!">{error.message}</p>}
         <Button black>{isLogin ? "Sign in" : "Sign up"}</Button>
       </Form>
-      <section className="bg-black mr-8 rounded-xl overflow-hidden">
+      <section className="bg-black mr-8 rounded-xl overflow-hidden max-md:hidden">
         <img src={image} className="w-full h-full object-cover"></img>
       </section>
     </article>
