@@ -49,7 +49,7 @@ export default function CartItem({ item }) {
     <li className="w-full h-50 flex gap-8 mt-4 max-lg:h-50 max-md:flex-col max-md:gap-2 max-md:h-auto ">
       <div className="max-w-80 max-lg:w-50 max-lg:h-fit max-md:w-full overflow-hidden">
         <img
-          src={`${server}/${data.product.image}`}
+          src={`${data.product.image}`}
           className="object-cover"
         ></img>
       </div>

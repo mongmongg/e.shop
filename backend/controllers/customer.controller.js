@@ -1,7 +1,6 @@
 import { Product } from "../models/product.model.js";
 async function getProducts(req, res, next) {
   const { search, max } = req.query;
-  console.log(max);
   let products;
   try {
     products = await Product.find();
@@ -13,7 +12,7 @@ async function getProducts(req, res, next) {
         return regex.test(searchableText);
       });
     } else if (max) {
-      products = products.slice(products.length - max, products.length);
+      products = products.slice(-max).reverse();
     }
   } catch (error) {
     next(error);

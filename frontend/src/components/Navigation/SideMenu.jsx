@@ -12,7 +12,7 @@ export default function SideMenu({
           Home
         </NavItem>
       )}
-      <NavItem to="products" end onClic>
+      <NavItem to="products" end>
         Products
       </NavItem>
       {isAdmin && <NavItem to="products/new">New product</NavItem>}

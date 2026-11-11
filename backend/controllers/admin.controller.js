@@ -1,6 +1,7 @@
 import { HttpError } from "../models/http-error.js";
 import Order from "../models/order.model.js";
 import { Product } from "../models/product.model.js";
+import cloudinary from "../data/cloudinary.js";
 
 async function getAllOrders(req, res, next) {
   //console.log("orders");
@@ -16,26 +17,54 @@ async function updateStatus(req, res, next) {
 }
 
 async function addProduct(req, res, next) {
-  console.log("new product");
   const { name, summary, description, price } = req.body;
-  const newProdData = new Product({
-    name,
-    summary,
-    description,
-    price,
-    image: req.file.path,
-  });
-  await newProdData.save();
+  if (!req.file) {
+    return res.status(400).json({ message: "Please upload a product image" });
+  }
+  const fileBase64 = req.file.buffer.toString("base64");
+  const fileUri = `data:${req.file.mimetype};base64,${fileBase64}`;
+  try {
+    const uploadResponse = await cloudinary.uploader.upload(fileUri, {
+      folder: "e-shop",
+    });
+    const newProdData = new Product({
+      name,
+      summary,
+      description,
+      price,
+      image: uploadResponse.secure_url,
+    });
+    await newProdData.save();
+  } catch (err) {
+    console.log(err);
+    const error = new HttpError("Error adding product", 500);
+    next(error);
+  }
 }
 async function updateProduct(req, res, next) {
   const pId = req.params.pId;
+  if (!req.file) {
+    return res.status(400).json({ message: "Please upload a product image" });
+  }
+  const fileBase64 = req.file.buffer.toString("base64");
+  const fileUri = `data:${req.file.mimetype};base64,${fileBase64}`;
+  let uploadResponse;
+  try {
+    uploadResponse = await cloudinary.uploader.upload(fileUri, {
+      folder: "e-shop",
+    });
+  } catch (err) {
+    console.log(err);
+    // const error = new HttpError("Error adding product", 500);
+    next(err);
+  }
   const { name, summary, description, price } = req.body;
   const updatedData = {
     name,
     summary,
     description,
     price,
-    image: req.file.path,
+    image: uploadResponse.secure_url,
   };
   try {
     const updated = await Product.findOneAndUpdate(

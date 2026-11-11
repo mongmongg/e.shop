@@ -1,8 +1,9 @@
 import PageContent from "../components/shared/PageContent";
 import { useGetOrder, useUpdateOrder } from "../hooks/useOrder";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import Button from "../components/UI/Button";
 import { useProductById } from "../hooks/useProduct";
-import { BASE_URL } from "../util/http";
 
 export default function Order() {
   const isAdmin = useSelector((state) => state.auth.isAdmin);
@@ -12,6 +13,14 @@ export default function Order() {
   return (
     <PageContent header={isAdmin ? "Customer Orders" : "Your Orders"}>
       <OrderContent>
+        {!isLoading && (!orders || orders.length <= 0) && (
+          <div className=" col-span-3 w-full mt-8 text-center">
+            <h1 className="mb-4 text-xl">You have no ordered yet</h1>
+            <Link to="/products">
+              <Button black>Start Shopping</Button>
+            </Link>
+          </div>
+        )}
         {!isLoading &&
           orders &&
           orders.map((order) => (
@@ -27,11 +36,9 @@ export function OrderContent({ children }) {
 export function OrderItem({ order, isAdmin }) {
   const { mutate } = useUpdateOrder();
 
-  const server = BASE_URL;
   const { data } = useProductById({
     pId: order.productsData.items[order.productsData.items.length - 1].id,
   });
-  console.log(order);
   const date = new Date(order.date);
   const formatedDate = date.toLocaleDateString("en-TH", {
     weekday: "long",
@@ -49,7 +56,7 @@ export function OrderItem({ order, isAdmin }) {
     <li className="w-full h-50 flex gap-8 mt-4 max-lg:h-50 max-md:flex-col max-md:gap-2 max-md:h-auto ">
       <div className="max-w-80 max-lg:w-50 max-lg:h-fit max-md:w-full overflow-hidden">
         <img
-          src={`${server}/${data.product.image}`}
+          src={data.product.image}
           className="max-lg:w-50 max-lg:h-fit max-md:w-full"
         ></img>
       </div>
