@@ -2,12 +2,9 @@ import { useNavigate } from "react-router-dom";
 import AddToCartButton from "../Cart/AddToCartButton";
 import Button from "../UI/Button";
 import { useSelector } from "react-redux";
-import { BASE_URL } from "../../util/http";
-
 export default function CardItem({ image, name, summary, price, id }) {
   const { isAdmin } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const server = BASE_URL;
   const handleDetailItem = () => {
     navigate(isAdmin ? `/admin/products/${id}` : `/products/${id}`);
   };
@@ -23,7 +20,7 @@ export default function CardItem({ image, name, summary, price, id }) {
     >
       <div className="bg-black h-6/10 rounded-xl overflow-hidden">
         <img
-          src={`${server}/${image.replace(/\\/g, "/")}`}
+          src={image}
           className="object-center object-cover w-full h-full"
         ></img>
       </div>
