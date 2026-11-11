@@ -52,7 +52,7 @@ Password: admin1234
 - Database: MongoDB, Mongoose
 - Authentication: JWT, HttpOnly Cookies, bcrypt
 - API Requests: Fetch API
-- Deployment: Netlify (Frontend), Render (Backend)
+- Deployment: Netlify (Frontend), Vercel (Backend)
 
 ---
 
