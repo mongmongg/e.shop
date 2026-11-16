@@ -1,0 +1,1 @@
+import{t as e}from"./PageContent-DlOUjyiC.js";import{t}from"./Products-BEQoHk02.js";import{_ as n}from"./Button-DHdRkAx_.js";var r=n();function i(){return(0,r.jsx)(e,{header:`Products`,children:(0,r.jsx)(`div`,{className:`col-span-3`,children:(0,r.jsx)(t,{})})})}export{i as default};
